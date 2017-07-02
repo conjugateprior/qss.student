@@ -1,0 +1,11 @@
+Package: fsi
+Type: Package
+Title: Provides Problem Sets for FSI's POL 245
+Version: 0.1.0
+Author: Will Lowe
+Maintainer: Will Lowe <wlowe@princeton.edu>
+Description: Stores and allows students to retrieve by name problem sets required
+    for POL 245.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
