@@ -5,20 +5,7 @@ Version: 0.1.0
 Author: Will Lowe
 Maintainer: Will Lowe <wlowe@princeton.edu>
 Description: Stores and allows students to retrieve by name problem sets required
-    for POL 245. Import list contains all third part packages necessary to complete
-    the problem sets.
-Imports:
-    rmarkdown,
-    markdown,
-    knitr,
-    animation,
-    maps,
-    tm,
-    SnowballC,
-    wordcloud,
-    igraph,
-    ineq,
-    slam
+    for POL 245.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
