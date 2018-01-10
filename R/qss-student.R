@@ -3,16 +3,17 @@
 #' This package contains problem sets from the qss-inst repository
 #' of exercises in Imai 2016 An Introduction to Quantitative Social Science.
 #'
-#' The instructor assigns students the name of a problem set, e.g. 'gay-marriage'.
-#' Each student loads the package and calls
+#' The instructor assigns students the name of a problem set, e.g.
+#' 'gay-marriage'.  Each student loads the package and calls
 #'
 #' \code{get_pset('gay-marriage')}
 #'
-#' This function unzips the problem set into the student's current working directory,
-#' and switches their current working directory to the top level of the problem set.
+#' This function unzips the problem set into the student's current working
+#' directory, and switches their current working directory to the top level of
+#' the problem set.
 #'
-#' Students open the Rmd file and add their own text and code blocks to answer the
-#' questions.  They then submit their compiled document as homework.
+#' Students open the Rmd file and add their own text and code blocks to answer
+#' the questions.  They then submit their compiled document as homework.
 #'
 #' A problem set from the qss-inst repository always contains
 #' \itemize{
@@ -20,12 +21,25 @@
 #'  \item{an pdf version of the Rmd file for readability}
 #'  \item{a data folder containing the data set}
 #' }
-#'
-#'
 #' @docType package
-#' @name fsi
+#' @name qss-student
 NULL
 
+
+get_pset_by_name <- function(pname){
+  system.file(file.path("extdata", paste0(pname, ".zip")),
+              package="qss-student")
+}
+
+unzip_pset_in_wd <- function(fname, setwd){
+  unzip(f)
+  if (setwd){
+    setwd(pname)
+    message(paste0("You might now want to update the files pane to the new problem set.",
+      "In RStudio, press the grey right-pointed arrow in the heading above your prompt",
+      collapse = "\n"))
+  }
+}
 
 #' Locate a problem set by name and unpack it
 #'
@@ -37,31 +51,60 @@ NULL
 #' }
 #'
 #' @param pname Name of a problem set
-#' @param setwd Whether to change working directory to where the files were unpacked. Default: TRUE
-#' @return None
+#' @param setwd Whether to change working directory to where the files were
+#' unpacked. Default: TRUE
 #' @export
-#'
-#' @examples
-#' \dontrun{ get_pset("test") }
-#'
-get_pset <- function(pname, setwd=TRUE){
-  f <- system.file(file.path("extdata", paste0(pname, ".zip")),
-                   package="fsi")
-  if (f == "")
-    stop("Could not find a problem set called '", pname, "'")
+get_pset <- function(pname, setwd = FALSE){
+  f <- get_pset_by_name(pname)
+  if (f == ""){
+    message("There is no problem set called '", pname, "'")
+    psets <- list_psets()
+    pmat <- agrep(pname, psets, max.distance = 3,
+                  value = TRUE, ignore.case = TRUE)
+    if (length(pmat) > 0 && length(pmat) < 6){
+      v <- menu(c(psets, "No, it's not one of these"),
+           "Did you mean one of these?")
+      if (!(v %in% c(0, length(psets) + 1))){
+        f <- file.path(system.file(file.path("extdata"), package = "fsi"),
+                       paste0(psets[v], ".zip"))
+        unzip_pset_in_wd(f, setwd)
+      }
+    }
+    return(invisible(NULL)) # bailed out of menu or didn't identify pset name
+  } else
+    unzip_pset_in_wd(f, setwd)
+}
 
-  if (pname %in% dir("."))
-    stop(paste0("It looks like you've already unpacked '", pname, "' here"))
+#   if (!(pname %in% dir("."))){
+#     if (setwd){
+#       setwd(pname)
+#       message(paste0("\nSetting the working directory to '", getwd(),
+#                      "'\n(To update RStudio's Files view, press the arrow next to the",
+#                      " grey file path above your Console)"))
+#     }
+#   } else {
+#     v <- utils::menu(
+#       c("Set your working directory to the old unpacked problem",
+#         "Rename the old unpacked problem set and unpack a fresh one",
+#         "Stop"),
+#         "It looks like that problem set has already been unpacked here.\nDo you want to")
+#
+#     if (v == 2){
+#
+#     } else if (v == 1)
+#       setwd(pname)
+#     else
+#       return(invisible(NULL))
+#   }
+#   message(paste0("Unpacking the '", pname, "' problem set..."))
+#   unzip(f)
+#
+#
+# }
 
-  message(paste0("Unpacking the '", pname, "' problem set..."))
-  unzip(f)
-
-  if (setwd){
-    setwd(pname)
-    message(paste0("\nSetting the working directory to '", getwd(),
-                   "'\n(To update RStudio's Files view, press the arrow next to the",
-                  " grey file path above your Console)"))
-  }
+list_psets <- function(){
+  psets <- list.files("extdata", pattern = "*.zip")
+  sort(tools::file_path_sans_ext(psets))
 }
 
 ##
