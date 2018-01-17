@@ -1,12 +1,11 @@
-Package: qss-student
+Package: qss.student
 Type: Package
-Title: Provides Problem Sets for QSS
+Title: Problem Sets for QSS
 Version: 0.1.0
 Author: Will Lowe
 Maintainer: Will Lowe <wlowe@princeton.edu>
-Description: Allows students to retrieve problem sets 
-             from the K. Imai 2016 'Quantatative Social Science: 
-             An Introduction'.
+Description: Allows students to retrieve problem sets in K. Imai, (2016) 'Quantatative Social Science: 
+             An Introduction' Princeton University Press.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true

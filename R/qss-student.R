@@ -31,12 +31,26 @@ get_pset_by_name <- function(pname){
               package="qss-student")
 }
 
-unzip_pset_in_wd <- function(fname, setwd){
-  unzip(f)
+
+
+#' Unzips problem set in working directory
+#'
+#' @param fname Problem set name
+#' @param setwd Whether to set the working directory to the unpacked directory
+#' @param overwrite Whether to overwrite any existing versions of the same
+#'                  problem set.
+#'
+#' @return Nothing
+unzip_pset_in_wd <- function(fname, setwd, overwrite){
+  if (!overwrite && (fname %in% list.dirs(".")))
+    stop(paste0(fname,
+                " is already unpacked here. To overwrite, set overwrite=TRUE\n",
+                "in get_pset."))
+  utils::unzip(fname, overwrite = overwrite)
   if (setwd){
-    setwd(pname)
-    message(paste0("You might now want to update the files pane to the new problem set.",
-      "In RStudio, press the grey right-pointed arrow in the heading above your prompt",
+    setwd(fname)
+    message(paste0("You might now want to update the files pane to look at the new problem set.",
+      "In RStudio, press the grey right-bending arrow in the Console heading",
       collapse = "\n"))
   }
 }
@@ -51,10 +65,12 @@ unzip_pset_in_wd <- function(fname, setwd){
 #' }
 #'
 #' @param pname Name of a problem set
+#' @param overwrite Whether to overwrite any previously unpacked problem sets.
+#'                  (Default: FALSE)
 #' @param setwd Whether to change working directory to where the files were
 #' unpacked. Default: TRUE
 #' @export
-get_pset <- function(pname, setwd = FALSE){
+get_pset <- function(pname, overwrite = FALSE, setwd = FALSE){
   f <- get_pset_by_name(pname)
   if (f == ""){
     message("There is no problem set called '", pname, "'")
@@ -62,17 +78,17 @@ get_pset <- function(pname, setwd = FALSE){
     pmat <- agrep(pname, psets, max.distance = 3,
                   value = TRUE, ignore.case = TRUE)
     if (length(pmat) > 0 && length(pmat) < 6){
-      v <- menu(c(psets, "No, it's not one of these"),
+      v <- utils::menu(c(psets, "No, it's not one of these"),
            "Did you mean one of these?")
       if (!(v %in% c(0, length(psets) + 1))){
         f <- file.path(system.file(file.path("extdata"), package = "fsi"),
                        paste0(psets[v], ".zip"))
-        unzip_pset_in_wd(f, setwd)
+        unzip_pset_in_wd(f, setwd, overwrite)
       }
     }
     return(invisible(NULL)) # bailed out of menu or didn't identify pset name
   } else
-    unzip_pset_in_wd(f, setwd)
+    unzip_pset_in_wd(f, setwd, overwrite)
 }
 
 #   if (!(pname %in% dir("."))){
@@ -102,65 +118,75 @@ get_pset <- function(pname, setwd = FALSE){
 #
 # }
 
+
+
+#' List available problem sets
+#'
+#' Call this function to get the names of all problem sets bundled
+#' in the package.  \code{get_pset} will try to guess which problem set
+#' you meant, but it will not always succeed.  This is the complete set.
+#'
+#' @return a vector of names of bundled problem sets
+#' @export
 list_psets <- function(){
   psets <- list.files("extdata", pattern = "*.zip")
   sort(tools::file_path_sans_ext(psets))
 }
-
-##
-## Functions for creating the inst/extdata folder contents from inside qss-inst
-##
-
-strip_answers_and_overwrite <- function(f){
-  lines <- readLines(f)
-  n <- length(lines)
-  rec = rep(TRUE, n)
-  keep <- TRUE
-  for (i in 1:n){
-    if (grepl("## Question ", lines[i]))
-      keep <- TRUE
-    if (grepl("## Answer ", lines[i]))
-      keep = FALSE
-    rec[i] <- keep
-  }
-  writeLines(lines[rec], f)
-}
-
-# function to be run in the top directory of qss-inst
-make_zips <- function(..., student=FALSE,
-                         output = c("html_document", "pdf_document")){
-
-  chapters <- c("CAUSALITY", "DISCOVERY", "INTRO", "MEASUREMENT", "PREDICTION")
-                ## "PROBABILITY", "UNCERTAINTY")
-  chs <- c(...)
-  if (!is.null(chs)) # of they specified any in particular, override the list
-    chapters <- chs
-
-  bundletype <- ifelse(student, "student", "instructor")
-
-  psets <- unlist(lapply(chapters, list.dirs, recursive=FALSE))
-  lapply(psets, file.copy, to=".", recursive = TRUE) # drag to top level
-  psets <- lapply(psets, basename) # the new paths
-  rmds <- lapply(psets, list.files, recursive=TRUE, pattern=".Rmd$", full.name=TRUE)
-  print(rmds)
-  process_rmd <- function(x){
-    message("Processing ", x)
-    if (student)
-      strip_answers_and_overwrite(x)
-    rmarkdown::render(x, output)
-  }
-  lapply(rmds, process_rmd)
-
-  stopfilenames <- ifelse(student, # files to leave out of the zips
-                          ".DS_Store|(README.md)|(lesson-plan.md)|(pics)",
-                          ".DS_Store|README.md")
-  remove_stopfiles <- function(x){
-    fs <- list.files(x, recursive=TRUE)
-    togo <- fs[grepl(stopfilenames, fs)]
-    if (length(togo) > 0)
-      file.remove(file.path(x, togo))
-  }
-  lapply(psets, remove_stopfiles)
-  lapply(psets, function(x){ zip(paste0(x, ".zip"), x) })
-  lapply(psets, unlink, recursive=TRUE)
-}
+#
+# ##
+# ## Functions for creating the inst/extdata folder contents from inside qss-inst
+# ##
+#
+# strip_answers_and_overwrite <- function(f){
+#   lines <- readLines(f)
+#   n <- length(lines)
+#   rec = rep(TRUE, n)
+#   keep <- TRUE
+#   for (i in 1:n){
+#     if (grepl("## Question ", lines[i]))
+#       keep <- TRUE
+#     if (grepl("## Answer ", lines[i]))
+#       keep = FALSE
+#     rec[i] <- keep
+#   }
+#   writeLines(lines[rec], f)
+# }
+#
+# # function to be run in the top directory of qss-inst
+# make_zips <- function(..., student=FALSE,
+#                          output = c("html_document", "pdf_document")){
+#
+#   chapters <- c("CAUSALITY", "DISCOVERY", "INTRO", "MEASUREMENT", "PREDICTION")
+#                 ## "PROBABILITY", "UNCERTAINTY")
+#   chs <- c(...)
+#   if (!is.null(chs)) # of they specified any in particular, override the list
+#     chapters <- chs
+#
+#   bundletype <- ifelse(student, "student", "instructor")
+#
+#   psets <- unlist(lapply(chapters, list.dirs, recursive=FALSE))
+#   lapply(psets, file.copy, to=".", recursive = TRUE) # drag to top level
+#   psets <- lapply(psets, basename) # the new paths
+#   rmds <- lapply(psets, list.files, recursive=TRUE, pattern=".Rmd$", full.name=TRUE)
+#   print(rmds)
+#   process_rmd <- function(x){
+#     message("Processing ", x)
+#     if (student)
+#       strip_answers_and_overwrite(x)
+#     rmarkdown::render(x, output)
+#   }
+#   lapply(rmds, process_rmd)
+#
+#   stopfilenames <- ifelse(student, # files to leave out of the zips
+#                           ".DS_Store|(README.md)|(lesson-plan.md)|(pics)",
+#                           ".DS_Store|README.md")
+#   remove_stopfiles <- function(x){
+#     fs <- list.files(x, recursive=TRUE)
+#     togo <- fs[grepl(stopfilenames, fs)]
+#     if (length(togo) > 0)
+#       file.remove(file.path(x, togo))
+#   }
+#   lapply(psets, remove_stopfiles)
+#   lapply(psets, function(x){ zip(paste0(x, ".zip"), x) })
+#   lapply(psets, unlink, recursive=TRUE)
+# }
