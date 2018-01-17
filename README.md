@@ -1,4 +1,4 @@
-# qss-student
+# qss.student
 
 A package to let students grab a problem set from the QSS book.
 Problem sets (without answers) are bundled as Rmarkdown files in the package.
