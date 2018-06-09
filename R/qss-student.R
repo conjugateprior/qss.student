@@ -18,41 +18,16 @@
 #' A problem set from the qss-inst repository always contains
 #' \itemize{
 #'  \item{an Rmd file describing the data set and listing several question.}
-#'  \item{an pdf version of the Rmd file for readability}
+#'  \item{a pdf version of the Rmd file for readability}
 #'  \item{a data folder containing the data set}
 #' }
 #' @docType package
 #' @name qss-student
 NULL
 
-
 get_pset_by_name <- function(pname){
   system.file(file.path("extdata", paste0(pname, ".zip")),
-              package="qss-student")
-}
-
-
-
-#' Unzips problem set in working directory
-#'
-#' @param fname Problem set name
-#' @param setwd Whether to set the working directory to the unpacked directory
-#' @param overwrite Whether to overwrite any existing versions of the same
-#'                  problem set.
-#'
-#' @return Nothing
-unzip_pset_in_wd <- function(fname, setwd, overwrite){
-  if (!overwrite && (fname %in% list.dirs(".")))
-    stop(paste0(fname,
-                " is already unpacked here. To overwrite, set overwrite=TRUE\n",
-                "in get_pset."))
-  utils::unzip(fname, overwrite = overwrite)
-  if (setwd){
-    setwd(fname)
-    message(paste0("You might now want to update the files pane to look at the new problem set.",
-      "In RStudio, press the grey right-bending arrow in the Console heading",
-      collapse = "\n"))
-  }
+              package="qss.student")
 }
 
 #' Locate a problem set by name and unpack it
@@ -65,31 +40,60 @@ unzip_pset_in_wd <- function(fname, setwd, overwrite){
 #' }
 #'
 #' @param pname Name of a problem set
-#' @param overwrite Whether to overwrite any previously unpacked problem sets.
-#'                  (Default: FALSE)
-#' @param setwd Whether to change working directory to where the files were
-#' unpacked. Default: TRUE
+#' @param newname What you'd like the unpacked problem set folder to be called
+#'                (Defaults to the value of \code{pname})
+#'
 #' @export
-get_pset <- function(pname, overwrite = FALSE, setwd = FALSE){
+get_pset <- function(pname, newname = NULL){
   f <- get_pset_by_name(pname)
   if (f == ""){
     message("There is no problem set called '", pname, "'")
     psets <- list_psets()
-    pmat <- agrep(pname, psets, max.distance = 3,
-                  value = TRUE, ignore.case = TRUE)
-    if (length(pmat) > 0 && length(pmat) < 6){
-      v <- utils::menu(c(psets, "No, it's not one of these"),
-           "Did you mean one of these?")
-      if (!(v %in% c(0, length(psets) + 1))){
-        f <- file.path(system.file(file.path("extdata"), package = "fsi"),
-                       paste0(psets[v], ".zip"))
-        unzip_pset_in_wd(f, setwd, overwrite)
-      }
-    }
-    return(invisible(NULL)) # bailed out of menu or didn't identify pset name
-  } else
-    unzip_pset_in_wd(f, setwd, overwrite)
+    v <- utils::menu(c(psets), "Did you mean one of these?")
+    if (v != 0){
+      pname <- psets[v]
+      f <- file.path(system.file(file.path("extdata"), package = "qss.student"),
+                     paste0(psets[v], ".zip"))
+    } else
+      return()
+  }
+  # f is the zip file
+  temp <- tempfile()
+  utils::unzip(f, exdir = temp)
+  if (!is.null(newname)){ # they've assigned a new name
+    if (!file.exists(newname)){
+      file.rename(file.path(temp, pname), newname)
+      dname <- newname
+    } else
+      stop(paste0('"', newname, '" exists here already. ",
+                  "Choose a different newname or delete the "', newname,
+                  '" folder first.'))
+  } else { # they want it to use its original name
+    if (!file.exists(pname)){
+      file.rename(file.path(temp, pname), pname)
+      dname <- pname
+    } else
+      stop(paste0('"', pname, '" exists here already. ",
+                  "Assign a newname or delete the "', pname,
+                  '" folder first.'))
+  }
+
+  cli::cat_line("Hint: To start working on this pset", col = "darkgray")
+  cli::cat_line("")
+  cli::cat_bullet('setwd("', dname, '")',
+                  col = "darkgray", bullet_col = "grey", bullet = "pointer")
+  cli::cat_bullet('file.edit("', paste0(dname, '.Rmd'), '")',
+                  bullet_col = "gray", col = "darkgray", bullet = "pointer")
+  cli::cat_line("")
+  if (identical(.Platform$GUI, "RStudio")){
+    cli::cat_line("You might also want to update the files pane ",
+                  "to show your current working directory", col = "darkgrey")
+    cli::cat_line("To do that, click on the grey right-turning arrow ",
+                  "in the Console heading", col = "darkgrey")
+  }
 }
+
+
 
 #   if (!(pname %in% dir("."))){
 #     if (setwd){
@@ -129,7 +133,8 @@ get_pset <- function(pname, overwrite = FALSE, setwd = FALSE){
 #' @return a vector of names of bundled problem sets
 #' @export
 list_psets <- function(){
-  psets <- list.files("extdata", pattern = "*.zip")
+  fs <- system.file("extdata", package="qss.student")
+  psets <- list.files(fs, pattern = "*.zip")
   sort(tools::file_path_sans_ext(psets))
 }
 #

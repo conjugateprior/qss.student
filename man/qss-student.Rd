@@ -25,7 +25,7 @@ the questions.  They then submit their compiled document as homework.
 A problem set from the qss-inst repository always contains
 \itemize{
  \item{an Rmd file describing the data set and listing several question.}
- \item{an pdf version of the Rmd file for readability}
+ \item{a pdf version of the Rmd file for readability}
  \item{a data folder containing the data set}
 }
 }

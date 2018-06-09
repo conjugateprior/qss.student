@@ -4,16 +4,13 @@
 \alias{get_pset}
 \title{Locate a problem set by name and unpack it}
 \usage{
-get_pset(pname, overwrite = FALSE, setwd = FALSE)
+get_pset(pname, newname = NULL)
 }
 \arguments{
 \item{pname}{Name of a problem set}
 
-\item{overwrite}{Whether to overwrite any previously unpacked problem sets.
-(Default: FALSE)}
-
-\item{setwd}{Whether to change working directory to where the files were
-unpacked. Default: TRUE}
+\item{newname}{What you'd like the unpacked problem set folder to be called
+(Defaults to the value of \code{pname})}
 }
 \description{
 This function \itemize{
