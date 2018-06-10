@@ -1,0 +1,179 @@
+---
+title: "Introduction to qss.student"
+author: "Will Lowe"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to qss.student}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+library(knitr)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+knit_hooks$set(wrapper = function(before, options, envir) {
+  if (before) {
+    sprintf('    ```{r %s}\n', options$params.src)
+  } else '    ```\n'
+})
+
+# Ascii tree from Jenny Bryan (adjusted to use a unicode arrow)
+# https://gist.github.com/jennybc/2bf1dbe6eb1f261dfe60
+twee <- function(path = getwd(), level = Inf) {
+  fad <- list.files(path = path, recursive = TRUE, 
+                    no.. = TRUE, include.dirs = TRUE)
+  fad_split_up <- strsplit(fad, "/")
+  too_deep <- lapply(fad_split_up, length) > level
+  fad_split_up[too_deep] <- NULL
+  jfun <- function(x) {
+    n <- length(x)
+    if (n > 1)
+      x[n - 1] <- "\U21b3 "
+    if (n > 2)
+      x[1:(n - 2)] <- "   "
+    x <- if (n == 1) c("- ", x) else c("  ", x)
+    x
+  }
+  fad_subbed_out <- lapply(fad_split_up, jfun)
+  cat(unlist(lapply(fad_subbed_out, paste, collapse = "")), sep = "\n")
+}
+```
+
+## Problem sets
+
+The `qss.student` package contains all the problem sets from   
+
+> K. Imai (2016) 'Quantitative Social Science: An Introduction', Princeton
+> University Press 
+
+plus a few extras not in the book.
+
+## Unpacking a problem set
+
+Imagine you are assigned a problem set from the book called `bias-in-turnout`.
+To complete the problem set make sure you have the package loaded
+```{r, eval = TRUE}
+library(qss.student)
+```
+and unpack the problem set into your current working directory
+```{r}
+get_pset("bias-in-turnout")
+```
+The current working directory should now look like this:
+
+    - bias-in-turnout
+      ↳ bias-in-turnout.pdf
+      ↳ bias-in-turnout.Rmd
+      ↳ bias-in-turnout.tex
+      ↳ data
+         ↳ turnout.csv
+
+that is, a folder called `bias-in-turnout` and inside it 
+
+* `bias-in-turnout.pdf`: a short description of the problem and the data
+* `bias-in-turnout.Rmd`: the source file for the problem set
+* `data` another folder containing all the data needed to complete the problem 
+   set
+* `data/turnout.csv`: the data set
+
+As `get_pset` messages suggest, let's make the problem set folder our working
+directory
+```{r}
+setwd("bias-in-turnout")
+```
+and open up the Rmd file so we can start filling in the answers to each question
+```{r}
+file.edit("bias-in-turnout.Rmd")
+```
+If you're in RStudio the file should now be editor tab.  
+
+## Answering the questions
+
+Each question has a header that looks like 
+
+    ## Question 1
+
+To provide an answer to this question, move your cursor to just above the 
+line that says `## Question 2` and start answering the question.  When you 
+need to compute something in R, start a 'code block'.  Here's a 
+bit of text you might write followed by a code block that
+loads the data set we need and counts the number of observations in it:
+
+    We load the data set and count the rows
+    ```{r}`r ''`
+    turnout <- read.csv("data/turnout.csv")
+    nrow(turnout)
+    ```
+
+You can have as much text and as many code blocks as you like.  (The variables
+you make in one code block are still there in the next one.)
+
+You can either type the beginning and end lines of the code block 
+or you can press the green Insert button in the Editor 
+pane's button menu, choose
+'R', and have it done for you.  Just don't forget to put the code inside the 
+backticks and don't nest code blocks inside one another or everything will
+get confused.
+
+## Compiling the problem set
+
+Yo can see what your answers look like at any point by pressing the 'Knit' 
+button.  This will try to run all your code, read all your answers and knit the 
+two together into a document.  What *kind* of a document is controllable from that 
+button.  If you chose 'Knit to HTML' (the default) your document will be called 
+'bias-in-turnout.html'.  If you chose 'Knit to PDF' or 'Knit to Word' it will 
+have a different suffix.
+
+You can compile whenever you like. Somee people like to work in the Rmd file
+all the time and Knit intermittently to check their code works.  Others, 
+particularly when starting off, prefer to do their thinking and coding in 
+a different document and then paste their working code and answers into 
+the Rmd file at the last minute.  Whatever works for you.
+
+## Getting into (and out of) trouble
+
+Sometimes you might feel it's best to start again with a fresh copy of 
+the problem set.  However, if you 
+```{r}
+get_pset("bias-in-turnout")
+```
+then you'll get a new problem set inside the one you're abandoning.  This
+makes things quite confusing.  It's better to go to top level of your files
+and grab a new copy, calling it something else.  You can move your
+working directory up a level with
+```{r}
+setwd("..")
+```
+In the language of file paths `..` means go up into the parent folder i.e. up
+one level.  (In case you're curious, `.` indicates the *current folder*, and if
+you wanted to go up *two* levels then `../..` would be what you wanted) 
+
+Now you're back to where you unpacked `bias-in-turnout`.  To grab a fresh
+copy with another name:
+```{r}
+get_pset("bias-in-turnout", newname = "bias-in-turnout-the-sequel")
+```
+(You may have a better idea for a name.) Now you can do it all again,
+only better.
+
+## All the other problem sets
+
+If you're curious about the other problem sets you can get a list of their 
+names with
+```{r, eval = TRUE}
+list_psets()
+```
+and you can take a peek at one of them (`constitutions`) without unpacking any 
+files using
+```{r}
+preview_pset("constitutions")
+```
+
+
+
