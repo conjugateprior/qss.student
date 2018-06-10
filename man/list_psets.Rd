@@ -10,7 +10,6 @@ list_psets()
 a vector of names of bundled problem sets
 }
 \description{
-Call this function to get the names of all problem sets bundled
-in the package.  \code{get_pset} will try to guess which problem set
-you meant, but it will not always succeed.  This is the complete set.
+Call this function to get the names of all problem sets
+in the package.
 }

@@ -2,3 +2,4 @@
 
 export(get_pset)
 export(list_psets)
+export(preview_pset)

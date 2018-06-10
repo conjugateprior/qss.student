@@ -1,28 +1,47 @@
-#' fsi: POL 245 problem sets at FSI
+#' qss.student
 #'
-#' This package contains problem sets from the qss-inst repository
-#' of exercises in Imai 2016 An Introduction to Quantitative Social Science.
+#' This package contains problem sets from
+#' K. Imai (2016) 'An Introduction to Quantitative Social
+#' Science' Princeton University Press.
 #'
-#' The instructor assigns students the name of a problem set, e.g.
-#' 'gay-marriage'.  Each student loads the package and calls
+#' @section Unpacking a Problem Set:
+#'
+#' Typically, your instructor will assign you the name of a problem set, e.g.
+#' 'gay-marriage'.  You can unpack the problem set into your local file
+#' system using \code{\link{get_pset}}, like this:
 #'
 #' \code{get_pset('gay-marriage')}
 #'
-#' This function unzips the problem set into the student's current working
-#' directory, and switches their current working directory to the top level of
-#' the problem set.
+#' This will unpack the problem set materials into a folder called
+#' 'gay-marriage' in your current working directory.
+#' (Type \code{\link{getwd}} if you're
+#' not sure where that is.  You can change it using \code{\link{setwd}} or
+#' through the graphical user interface).
 #'
-#' Students open the Rmd file and add their own text and code blocks to answer
-#' the questions.  They then submit their compiled document as homework.
+#' Don't worry about typing the name wrong. If it's not recognized you'll get a
+#' menu of problem sets to choose from.
 #'
-#' A problem set from the qss-inst repository always contains
-#' \itemize{
-#'  \item{an Rmd file describing the data set and listing several question.}
-#'  \item{a pdf version of the Rmd file for readability}
-#'  \item{a data folder containing the data set}
-#' }
+#' @section Starting Again:
+#' If you want to start again on the same problem set, you'll can unpack the
+#' problem set again under a different name (\code{\link{get_pset}} won't
+#' overwrite an existing folder.)  To do this use the
+#' \code{newname} argument.  If you want your new copy to be called
+#' 'gay-marriage-take2', then use
+#'
+#' \code{get_pset('gay-marriage', newname = "gay-marriage-take2")}
+#'
+#' Provided there's no 'gay-marriage-take2' folder already in your
+#' current working directory, you'll get a fresh problem set unpacked there.
+#'
+#' @section Lists and Previews:
+#' To see the complete list of available problem sets, use
+#' \code{\link{list_psets}}.
+#'
+#' If you want to preview the questions in a problem set without
+#' unpacking it into your file system, use \code{\link{preview_pset}}.
+#'
 #' @docType package
-#' @name qss-student
+#' @name qss.student
 NULL
 
 get_pset_by_name <- function(pname){
@@ -30,19 +49,25 @@ get_pset_by_name <- function(pname){
               package = "qss.student")
 }
 
-#' Locate a problem set by name and unpack it
+#' Unpack a problem set by name
 #'
-#' This function \itemize{
-#'   \item{Finds a problem set by name},
-#'   \item{Unpacks it to wherever you are working},
-#'   \item{Moves your current working directory to the problem set folder (unless you set \code{setwd} to FALSE).}
-#'   \item{Reminds you that you probably want to make the Files view match your new working directory, and tells you how.}
-#' }
+#' This function finds a problem set by its name,
+#' unpacks it into your current working directory, and
+#' provides some hints to get going.
+#'
+#' By default the problem set will unpack into a folder of the same name.
+#' If you'd prefer to unpack the problem set under a different name, perhaps
+#' because you've decided to start fresh, or because for whatever reason there's
+#' already a folder with that name where you want to unpack it, use the
+#' \code{newname} argument to asign a new one.  (Note that this only renames the
+#' top folder. The contents are keep their original names.)
 #'
 #' @param pname Name of a problem set
-#' @param newname What you'd like the unpacked problem set folder to be called
-#'                (Defaults to the value of \code{pname})
-#'
+#' @param newname Your preferred name for the unpacked problem set.
+#'                Default: NULL (use \code{pname} as the folder name)
+#' @seealso \code{\link{preview_pset}} to see problem set questions without
+#'          unpacking anything, and \code{\link{list_psets}} to see the complete
+#'          set of problem sets.
 #' @export
 get_pset <- function(pname, newname = NULL){
   f <- get_pset_by_name(pname)
@@ -99,42 +124,10 @@ get_pset <- function(pname, newname = NULL){
   }
 }
 
-
-
-#   if (!(pname %in% dir("."))){
-#     if (setwd){
-#       setwd(pname)
-#       message(paste0("\nSetting the working directory to '", getwd(),
-#                      "'\n(To update RStudio's Files view, press the arrow next to the",
-#                      " grey file path above your Console)"))
-#     }
-#   } else {
-#     v <- utils::menu(
-#       c("Set your working directory to the old unpacked problem",
-#         "Rename the old unpacked problem set and unpack a fresh one",
-#         "Stop"),
-#         "It looks like that problem set has already been unpacked here.\nDo you want to")
-#
-#     if (v == 2){
-#
-#     } else if (v == 1)
-#       setwd(pname)
-#     else
-#       return(invisible(NULL))
-#   }
-#   message(paste0("Unpacking the '", pname, "' problem set..."))
-#   unzip(f)
-#
-#
-# }
-
-
-
 #' List available problem sets
 #'
-#' Call this function to get the names of all problem sets bundled
-#' in the package.  \code{get_pset} will try to guess which problem set
-#' you meant, but it will not always succeed.  This is the complete set.
+#' Call this function to get the names of all problem sets
+#' in the package.
 #'
 #' @return a vector of names of bundled problem sets
 #' @export
@@ -144,6 +137,37 @@ list_psets <- function(){
   sort(tools::file_path_sans_ext(psets))
 }
 
+#' Preview a problem set
+#'
+#' Launches the pdf viewer to show the questions in a problem set. If the
+#' problem set name is not recognized a menu of options is provided.
+#'
+#' @param pname Name of a problem set
+#'
+#' @return Nothing.
+#' @export
+#'
+preview_pset <- function(pname){
+  f <- get_pset_by_name(pname)
+  if (f == "") {
+    message("There is no problem set called '", pname, "'")
+    psets <- list_psets()
+    v <- utils::menu(c(psets), "Did you mean one of these?")
+    if (v != 0) {
+      pname <- psets[v]
+      f <- file.path(system.file(file.path("extdata"), package = "qss.student"),
+                     paste0(psets[v], ".zip"))
+    } else
+      return()
+  }
+  tmp <- tempdir()
+  unzip(f, exdir = tmp)
+  pdf <- file.path(tmp, pname, paste0(pname, ".pdf"))
+  if (file.exists(pdf))
+    system2("open", args = list(pdf))
+  else
+    message("Sorry. There doesn't seem to be a preview available for that pset")
+}
 #
 # ##
 # ## Functions for creating the inst/extdata folder contents from inside qss-inst

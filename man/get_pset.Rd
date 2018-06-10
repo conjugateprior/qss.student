@@ -2,21 +2,31 @@
 % Please edit documentation in R/qss-student.R
 \name{get_pset}
 \alias{get_pset}
-\title{Locate a problem set by name and unpack it}
+\title{Unpack a problem set by name}
 \usage{
 get_pset(pname, newname = NULL)
 }
 \arguments{
 \item{pname}{Name of a problem set}
 
-\item{newname}{What you'd like the unpacked problem set folder to be called
-(Defaults to the value of \code{pname})}
+\item{newname}{Your preferred name for the unpacked problem set.
+Default: NULL (use \code{pname} as the folder name)}
 }
 \description{
-This function \itemize{
-  \item{Finds a problem set by name},
-  \item{Unpacks it to wherever you are working},
-  \item{Moves your current working directory to the problem set folder (unless you set \code{setwd} to FALSE).}
-  \item{Reminds you that you probably want to make the Files view match your new working directory, and tells you how.}
+This function finds a problem set by its name,
+unpacks it into your current working directory, and
+provides some hints to get going.
 }
+\details{
+By default the problem set will unpack into a folder of the same name.
+If you'd prefer to unpack the problem set under a different name, perhaps
+because you've decided to start fresh, or because for whatever reason there's
+already a folder with that name where you want to unpack it, use the
+\code{newname} argument to asign a new one.  (Note that this only renames the
+top folder. The contents are keep their original names.)
+}
+\seealso{
+\code{\link{preview_pset}} to see problem set questions without
+         unpacking anything, and \code{\link{list_psets}} to see the complete
+         set of problem sets.
 }

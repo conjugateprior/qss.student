@@ -4,7 +4,7 @@ Title: Problem Sets for QSS
 Version: 0.2.0
 Author: Will Lowe
 Maintainer: Will Lowe <wlowe@princeton.edu>
-Description: Allows students to retrieve problem sets in K. Imai, (2016) 
+Description: Retrieve Rmarkdown problem sets from K. Imai, (2016) 
              'Quantitative Social Science: An Introduction' Princeton 
              University Press.
 License: GPL-2
