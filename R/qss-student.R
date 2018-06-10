@@ -161,7 +161,7 @@ preview_pset <- function(pname){
       return()
   }
   tmp <- tempdir()
-  unzip(f, exdir = tmp)
+  utils::unzip(f, exdir = tmp)
   pdf <- file.path(tmp, pname, paste0(pname, ".pdf"))
   if (file.exists(pdf))
     system2("open", args = list(pdf))
