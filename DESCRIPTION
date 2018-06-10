@@ -1,7 +1,7 @@
 Package: qss.student
 Type: Package
 Title: Problem Sets for QSS
-Version: 0.1.0
+Version: 0.2.0
 Author: Will Lowe
 Maintainer: Will Lowe <wlowe@princeton.edu>
 Description: Allows students to retrieve problem sets in K. Imai, (2016) 

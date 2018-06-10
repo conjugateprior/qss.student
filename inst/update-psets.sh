@@ -6,8 +6,8 @@
 #                student = TRUE, output = "pdf_document", pset_zips = TRUE)
 # This fills qss-student/ with zipped psets (without solutions)
 #
-QSSINST = "~/wip/qss-inst-forked"
-QSSSTUDENT = "~/wip/qss.student"
+QSSINST="~/wip/qss-inst-forked"
+QSSSTUDENT="~/wip/qss.student"
 
 rm $QSSSTUDENT/extdata/*.zip
 cp $QSSINST/qss-student/*.zip $QSSSTUDENT/extdata/
