@@ -27,7 +27,7 @@ NULL
 
 get_pset_by_name <- function(pname){
   system.file(file.path("extdata", paste0(pname, ".zip")),
-              package="qss.student")
+              package = "qss.student")
 }
 
 #' Locate a problem set by name and unpack it
@@ -46,11 +46,11 @@ get_pset_by_name <- function(pname){
 #' @export
 get_pset <- function(pname, newname = NULL){
   f <- get_pset_by_name(pname)
-  if (f == ""){
+  if (f == "") {
     message("There is no problem set called '", pname, "'")
     psets <- list_psets()
     v <- utils::menu(c(psets), "Did you mean one of these?")
-    if (v != 0){
+    if (v != 0) {
       pname <- psets[v]
       f <- file.path(system.file(file.path("extdata"), package = "qss.student"),
                      paste0(psets[v], ".zip"))
@@ -60,16 +60,17 @@ get_pset <- function(pname, newname = NULL){
   # f is the zip file
   temp <- tempfile()
   utils::unzip(f, exdir = temp)
-  if (!is.null(newname)){ # they've assigned a new name
-    if (!file.exists(newname)){
+  if (!is.null(newname)) { # they've assigned a new name
+    if (!file.exists(newname)) {
       file.rename(file.path(temp, pname), newname)
       dname <- newname
     } else
       stop(paste0('"', newname, '" exists here already. ",
                   "Choose a different newname or delete the "', newname,
                   '" folder first.'))
-  } else { # they want it to use its original name
-    if (!file.exists(pname)){
+  } else {
+    # they want it to use its original name
+    if (!file.exists(pname)) {
       file.rename(file.path(temp, pname), pname)
       dname <- pname
     } else
@@ -85,11 +86,16 @@ get_pset <- function(pname, newname = NULL){
   cli::cat_bullet('file.edit("', paste0(dname, '.Rmd'), '")',
                   bullet_col = "gray", col = "darkgray", bullet = "pointer")
   cli::cat_line("")
-  if (identical(.Platform$GUI, "RStudio")){
-    cli::cat_line("You might also want to update the files pane ",
+
+  cli::cat_line('To view the questions in compiled form, click on ',
+                paste0(dname, '.pdf'), "in the Files tab",
+                col = "darkgray", bullet_col = "grey", bullet = "pointer")
+  if (identical(.Platform$GUI, "RStudio")) {
+    cli::cat_line("")
+    cli::cat_line("It's also good idea to update the files pane ",
                   "to show your current working directory", col = "darkgrey")
     cli::cat_line("To do that, click on the grey right-turning arrow ",
-                  "in the Console heading", col = "darkgrey")
+                  "in this header of this Console", col = "darkgrey")
   }
 }
 
@@ -133,10 +139,11 @@ get_pset <- function(pname, newname = NULL){
 #' @return a vector of names of bundled problem sets
 #' @export
 list_psets <- function(){
-  fs <- system.file("extdata", package="qss.student")
+  fs <- system.file("extdata", package = "qss.student")
   psets <- list.files(fs, pattern = "*.zip")
   sort(tools::file_path_sans_ext(psets))
 }
+
 #
 # ##
 # ## Functions for creating the inst/extdata folder contents from inside qss-inst
