@@ -1,10 +1,10 @@
 ---
-title: "Introduction to qss.student"
+title: "Introduction"
 author: "Will Lowe"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to qss.student}
+  %\VignetteIndexEntry{Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -47,12 +47,13 @@ twee <- function(path = getwd(), level = Inf) {
 
 ## Problem sets
 
-The `qss.student` package contains all the problem sets from   
+The `qss.student` package contains the questions and data sets from the 
+problem sets in
 
 > K. Imai (2016) 'Quantitative Social Science: An Introduction', Princeton
 > University Press 
 
-plus a few extras not in the book.
+plus a few extra problem sets not in the book.
 
 ## Unpacking a problem set
 
@@ -125,10 +126,10 @@ get confused.
 
 Yo can see what your answers look like at any point by pressing the 'Knit' 
 button.  This will try to run all your code, read all your answers and knit the 
-two together into a document.  What *kind* of a document is controllable from that 
-button.  If you chose 'Knit to HTML' (the default) your document will be called 
-'bias-in-turnout.html'.  If you chose 'Knit to PDF' or 'Knit to Word' it will 
-have a different suffix.
+two together into a document.  What *kind* of a document is controllable from 
+that button.  If you chose 'Knit to HTML' (the default) your document will be 
+called  'bias-in-turnout.html'.  If you chose 'Knit to PDF' or 'Knit to Word' 
+it will have a different suffix.
 
 You can compile whenever you like. Somee people like to work in the Rmd file
 all the time and Knit intermittently to check their code works.  Others, 
