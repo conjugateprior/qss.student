@@ -1,14 +1,11 @@
-# `qss.student`
+# The qss.student package
 
-A package to allow students to unpack problem sets from 
+qss.student allows students to unpack and complete problem sets from 
 
 > K. Imai (2016) *Quantitative Social Science: An Introduction*. Princeton 
 > University Press.
 
-or one of the supplementary problem sets available from the author.
-
-Note: This package contains all the questions, all the data, but none of the 
-answers!
+or one of the supplementary sets available from the author.
 
 ## Installation
 
@@ -17,4 +14,14 @@ the `devtools` package installed and then grab the package from GitHub.
 Like this:
 
     devtools::install_github("conjugateprior/qss.student")
-    
+  
+## Notes 
+
+* This package contains all the questions, all the data, but none of the 
+  answers!
+* It is a *complement* to the [`qss` package](https://kosukeimai.github.io/qss-package).
+  That package contains the code from the book chapters. This one has the 
+  problems that appear after each chapter.
+
+
+
