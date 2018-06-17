@@ -2,8 +2,7 @@ Package: qss.student
 Type: Package
 Title: Problem Sets for QSS
 Version: 0.2.0
-Author: Will Lowe
-Maintainer: Will Lowe <wlowe@princeton.edu>
+Authors@R: person("Will", "Lowe", role = c("aut", "cre"), email = "wlowe@princeton.edu")
 Description: Retrieve Rmarkdown problem sets from K. Imai, (2016) 
              'Quantitative Social Science: An Introduction' Princeton 
              University Press.
@@ -16,3 +15,5 @@ Suggests: testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/conjugateprior/qss.student
+BugReports: https://github.com/conjugateprior/qss.student/issues
