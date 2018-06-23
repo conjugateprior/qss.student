@@ -2,7 +2,7 @@
 
 qss.student allows students to unpack and complete problem sets from 
 
-> K. Imai (2016) *Quantitative Social Science: An Introduction*. Princeton 
+> K. Imai (2017) *Quantitative Social Science: An Introduction*. Princeton 
 > University Press.
 
 or one of the supplementary sets available from the author.
