@@ -1,3 +1,10 @@
+# qss.student 0.2.1
+
+## Package 
+ 
+* Fixed reference and link to textbook in documentation
+* Added travis CI
+
 # qss.student 0.2.0
 
 ## Data

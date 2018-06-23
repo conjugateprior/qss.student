@@ -7,7 +7,7 @@
 \title{qss.student}
 \description{
 This package contains problem sets from
-K. Imai (2016) 'An Introduction to Quantitative Social
+K. Imai (2017) 'An Introduction to Quantitative Social
 Science' Princeton University Press.
 }
 \section{Unpacking a Problem Set}{

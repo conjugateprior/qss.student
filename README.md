@@ -23,5 +23,4 @@ Like this:
   That package contains the code from the book chapters. This one has the 
   problems that appear after each chapter.
 
-
-
+[![Travis-CI Build Status](https://travis-ci.org/conjugateprior/qss.student.svg?branch=master)](https://travis-ci.org/conjugateprior/qss.student)
