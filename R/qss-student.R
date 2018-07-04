@@ -164,7 +164,7 @@ preview_pset <- function(pname){
   utils::unzip(f, exdir = tmp)
   pdf <- file.path(tmp, pname, paste0(pname, ".pdf"))
   if (file.exists(pdf))
-    system2("open", args = list(pdf))
+    utils::browseURL(pdf)
   else
     message("Sorry. There doesn't seem to be a preview available for that pset")
 }
