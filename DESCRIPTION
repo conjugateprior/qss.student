@@ -11,9 +11,10 @@ Encoding: UTF-8
 LazyData: true
 Imports: cli
 RoxygenNote: 6.0.1
+Depends: swirl
 Suggests: testthat,
-    knitr,
-    rmarkdown
+  knitr,
+  rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/conjugateprior/qss.student
 BugReports: https://github.com/conjugateprior/qss.student/issues
