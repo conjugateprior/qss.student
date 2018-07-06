@@ -83,26 +83,37 @@ get_pset <- function(pname, newname = NULL){
       return()
   }
   # f is the zip file
-  temp <- tempfile()
+  temp <- ".unpacking_psets"
+  if (!dir.exists(temp)){
+    success <- dir.create(temp)
+    if (!success)
+      stop("Could not create temporary directory", temp)
+  }
   utils::unzip(f, exdir = temp)
   if (!is.null(newname)) { # they've assigned a new name
     if (!file.exists(newname)) {
       file.rename(file.path(temp, pname), newname)
       dname <- newname
-    } else
+    } else {
+      unlink(temp, recursive = TRUE) # bye
       stop(paste0('"', newname, '" exists here already. ",
                   "Choose a different newname or delete the "', newname,
                   '" folder first.'))
+    }
   } else {
     # they want it to use its original name
     if (!file.exists(pname)) {
       file.rename(file.path(temp, pname), pname)
       dname <- pname
-    } else
+    } else {
+      unlink(temp, recursive = TRUE) # bye
       stop(paste0('"', pname, '" exists here already. ",
                   "Assign a newname or delete the "', pname,
                   '" folder first.'))
+    }
   }
+  if (dir.exists(temp))
+    unlink(temp, recursive = TRUE) # bye
 
   cli::cat_line("Hint: To start working on this pset", col = "darkgray")
   cli::cat_line("")
