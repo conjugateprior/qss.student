@@ -124,13 +124,13 @@ get_pset <- function(pname, newname = NULL){
   cli::cat_line("")
 
   cli::cat_line('To view the questions in compiled form, click on ',
-                paste0(dname, '.pdf'), "in the Files tab",
-                col = "darkgray", bullet_col = "grey", bullet = "pointer")
+                paste0(dname, '.pdf'), " in the Files tab",
+                col = "darkgray")
   if (identical(.Platform$GUI, "RStudio")) {
     cli::cat_line("")
     cli::cat_line("It's also good idea to update the files pane ",
-                  "to show your current working directory", col = "darkgrey")
-    cli::cat_line("To do that, click on the grey right-turning arrow ",
+                  "to show your current working directory. ",
+                  "To do that, click on the grey right-turning arrow ",
                   "in this header of this Console", col = "darkgrey")
   }
 }
