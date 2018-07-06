@@ -96,9 +96,10 @@ get_pset <- function(pname, newname = NULL){
       dname <- newname
     } else {
       unlink(temp, recursive = TRUE) # bye
-      stop(paste0('"', newname, '" exists here already. ",
-                  "Choose a different newname or delete the "', newname,
-                  '" folder first.'))
+      stop("A folder called ", newname, " exists here already.",
+           " Choose a different value for newname or delete the ", newname,
+           " folder and try again. Maybe also use getwd() to confirm you are where",
+           " you think you are in the file system.")
     }
   } else {
     # they want it to use its original name
@@ -107,9 +108,10 @@ get_pset <- function(pname, newname = NULL){
       dname <- pname
     } else {
       unlink(temp, recursive = TRUE) # bye
-      stop(paste0('"', pname, '" exists here already. ",
-                  "Assign a newname or delete the "', pname,
-                  '" folder first.'))
+      stop("A folder called ", pname, " exists here already.",
+           " Choose a different value for newname or delete the ", pname,
+           " folder and try again. Maybe also use getwd() to confirm you are where",
+           " you think you are in the file system.")
     }
   }
   if (dir.exists(temp))
