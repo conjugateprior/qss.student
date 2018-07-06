@@ -1,3 +1,18 @@
+# qss.student 0.2.2
+ 
+## Package 
+
+* The package now requires swirl, on the assumption 
+  students might also be using the qss-swirl course
+ 
+## Functions
+
+* get_pset now makes its own local temporary directory and
+  deletes it after use to get around file.rename failing due
+  to an "Invalid cross-device link" errors
+* Fixed typos in the get_pset advice and made it a bit more
+  verbose
+
 # qss.student 0.2.1
 
 ## Package 
